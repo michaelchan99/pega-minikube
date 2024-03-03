@@ -85,11 +85,21 @@ kubectl port-forward --namespace default svc/postgres-helm-postgresql 5432:5432 
 ## Database: pega
 
 12) Install Elastic Search
+## ElasticSearch docker image version can be check on https://www.docker.elastic.co/r/elasticsearch
 cd .\pega\pega-minikube\single-minikube\elasticsearch
-helm install elasticsearch elastic/elasticsearch -f values.yaml
+helm install es-minikube elastic/elasticsearch -f values.yaml --set imageTag=8.10.3
+kubectl get pods --namespace=default -l app=elasticsearch-master -w
+kubectl get services -n default
 
 ## Test if ElasticSearch is working
+## Windows do not have base64, can use https://www.base64decode.org/
 kubectl get secrets --namespace=default elasticsearch-master-credentials -ojsonpath='{.data.password}' | base64 -d
-##
-helm --namespace=default test elasticsearch
-13)
+## Test with build-in utility
+helm --namespace=default test es-minikube
+## Check with port forword
+kubectl port-forward svc/elasticsearch-master 9200:9200
+## Open brower and https://localhost:9200/
+## Login with username: elastic , password: from above base64 decode
+## It should display elastic search verison number
+
+13) Install PEGA
