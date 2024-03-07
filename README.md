@@ -55,9 +55,20 @@ docker load < search-n-reporting-service.1.29.1.tar
 ## check if image load
 docker image ls
 
+$ docker image ls
+REPOSITORY                                                                    TAG       IMAGE ID       CREATED         SIZE
+pega-docker.downloads.pega.com/platform/installer                             8.23.1    600173d93113   2 weeks ago     3.87GB
+pega-docker.downloads.pega.com/platform/pega                                  8.23.1    2cbc4406e8f9   2 weeks ago     442MB
+pega-docker.downloads.pega.com/platform/clustering-service                    1.3.15    afdcbebb442d   4 weeks ago     995MB
+pega-docker.downloads.pega.com/platform-services/search-n-reporting-service   1.29.1    53b3ce06d221   5 weeks ago     267MB
+pega-docker.downloads.pega.com/constellation-appstatic-service/docker-image   1.11.0    b493aecf339f   8 weeks ago     179MB
+pega-docker.downloads.pega.com/platform/clustering-service-kubectl            1.3.14    1f3ec2d9b063   3 months ago    168MB
+pega-docker.downloads.pega.com/constellation-messaging/docker-image           5.4.0     d4087ef3a923   4 months ago    213MB
+
 9) Add Helm repo
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo add elastic https://helm.elastic.co
+helm repo add pega https://pegasystems.github.io/pega-helm-charts
 
 10) Add Persistent Volume and Persistent Volume Claim, and Install PostgreSQL 
 cd pega\pega-minikube\single-minikube\postgreSQL
@@ -102,4 +113,36 @@ kubectl port-forward svc/elasticsearch-master 9200:9200
 ## Login with username: elastic , password: from above base64 decode
 ## It should display elastic search verison number
 
-13) Install PEGA
+13) Install Kafka
+helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka --set listeners.client.protocol=PLAINTEXT --set listeners.controller.protocol=PLAINTEXT --set listeners.interbroker.protocol=PLAINTEXT --set listeners.external.protocol=PLAINTEXT
+
+Kafka can be accessed by consumers via port 9092 on the following DNS name from within your cluster:
+
+    kafka.default.svc.cluster.local
+
+Each Kafka broker can be accessed by producers via port 9092 on the following DNS name(s) from within your cluster:
+
+    kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092
+    kafka-controller-1.kafka-controller-headless.default.svc.cluster.local:9092
+    kafka-controller-2.kafka-controller-headless.default.svc.cluster.local:9092
+
+
+14) Install PEGA
+helm install mypega pega/pega --values pega-min.yaml --set global.actions.execute=install-deploy
+
+15) Get PEGA service port
+minikube service pega-minikube
+
+16) Login
+administrator@pega.com
+pegapega
+
+
+michaelchan99@gmail.com
+password:
+5N,AU'"ewe
+
+
+michaelchan99@hotmail.com
+password:
+s(ZX-XgJ8c

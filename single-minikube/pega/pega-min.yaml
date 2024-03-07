@@ -118,7 +118,7 @@ global:
   # configuration under External Services
   tier:
     - name: "minikube"
-      nodeType: "WebUser"
+      nodeType: "BackgroundProcessing,WebUser,Search"
 
       service:
         httpEnabled: true
@@ -171,9 +171,9 @@ global:
 
       # Set resource consumption to minimal levels
       replicas: 1
-      cpuRequest: 200m
+      cpuRequest: 2
       memRequest: "6Gi"
-      cpuLimit: 2
+      cpuLimit: 4
       memLimit: "6Gi"
       javaOpts: ""
       initialHeap: "4096m"
@@ -259,9 +259,9 @@ hazelcast:
 # Stream (externalized Kafka service) settings.
 stream:
   # Beginning with Pega Platform '23, enabled by default; when disabled, your deployment does not use a"Kafka stream service" configuration.
-  enabled: false
+  enabled: true
   # Provide externalized Kafka service broker urls.
-  bootstrapServer: ""
+  bootstrapServer: "kafka.default.svc.cluster.local:9092"
   # Provide Security Protocol used to communicate with kafka brokers. Supported values are: PLAINTEXT, SSL, SASL_PLAINTEXT, SASL_SSL.
   securityProtocol: PLAINTEXT
   # If required, provide trustStore certificate file name
